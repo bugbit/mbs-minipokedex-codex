@@ -5,6 +5,20 @@ Todos los cambios notables de este proyecto se documentarán en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [0.1.3] - 2026-04-10
+### Fixed
+- Se desactiva la generación de `apphost.exe` en `minipokedex.csproj` (`UseAppHost=false`) para evitar el error `MSB4018 CreateAppHost` por acceso denegado al archivo `obj/Debug/net10.0/apphost.exe` en entornos Windows bloqueados.
+- Documentación técnica del ajuste en `/docs/004-fix-createapphost-access-denied.md`.
+
+## [0.1.2] - 2026-04-10
+### Added
+- Paginación real en la vista principal con navegación por números de página, estado activo y botones Anterior/Siguiente deshabilitados cuando corresponde.
+
+### Changed
+- Consulta de listado de Pokémon ahora devuelve también `TotalCount` para calcular el total de páginas desde la respuesta oficial de PokeAPI.
+- Ajustes en modelo de vista y controlador para mantener la lógica de paginación fuera de la vista y respetar separación de responsabilidades.
+- Documentación técnica del cambio en `/docs/003-paginacion-pagina-principal.md`.
+
 ## [0.1.1] - 2026-04-10
 ### Fixed
 - Corrección de `CS0246` en infraestructura al importar explícitamente `Microsoft.Extensions.Configuration` para `IConfiguration`.

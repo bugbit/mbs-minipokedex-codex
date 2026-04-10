@@ -7,12 +7,12 @@ namespace MiniPokedex.Infrastructure.Repositories;
 
 public sealed class PokeApiPokemonRepository(IPokeApiClient client) : IPokemonRepository
 {
-    public async Task<IReadOnlyCollection<Pokemon>> GetPokemonPageAsync(int limit, int offset, CancellationToken cancellationToken = default)
+    public async Task<PokemonPageResult> GetPokemonPageAsync(int limit, int offset, CancellationToken cancellationToken = default)
     {
         var listResponse = await client.GetPokemonListAsync(limit, offset, cancellationToken);
         if (listResponse?.Results.Count is not > 0)
         {
-            return [];
+            return new PokemonPageResult(listResponse?.Count ?? 0, []);
         }
 
         var tasks = listResponse.Results
@@ -21,10 +21,12 @@ public sealed class PokeApiPokemonRepository(IPokeApiClient client) : IPokemonRe
 
         var details = await Task.WhenAll(tasks);
 
-        return details
+        var pokemon = details
             .Where(detail => detail is not null)
             .Select(detail => ToDomain(detail!))
             .ToArray();
+
+        return new PokemonPageResult(listResponse.Count, pokemon);
     }
 
     public async Task<Pokemon?> GetByNameOrIdAsync(string nameOrId, CancellationToken cancellationToken = default)

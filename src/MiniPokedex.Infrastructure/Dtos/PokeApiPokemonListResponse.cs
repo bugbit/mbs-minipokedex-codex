@@ -4,6 +4,9 @@ namespace MiniPokedex.Infrastructure.Dtos;
 
 public sealed class PokeApiPokemonListResponse
 {
+    [JsonPropertyName("count")]
+    public int Count { get; set; }
+
     [JsonPropertyName("results")]
     public List<PokeApiPokemonListItem> Results { get; set; } = [];
 }

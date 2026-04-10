@@ -28,7 +28,33 @@
     }
 </div>
 
-<div class="d-flex justify-content-between mt-4">
-    <a class="btn btn-outline-secondary @(Model.Page <= 1 ? "disabled" : string.Empty)" asp-action="Index" asp-route-page="@(Model.Page - 1)" asp-route-pageSize="@Model.PageSize">Anterior</a>
-    <a class="btn btn-outline-secondary" asp-action="Index" asp-route-page="@(Model.Page + 1)" asp-route-pageSize="@Model.PageSize">Siguiente</a>
+<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mt-4">
+    <small class="text-muted">
+        Mostrando página @Model.Page de @Model.TotalPages (@Model.TotalCount Pokémon)
+    </small>
+
+    <nav aria-label="Paginación de Pokémon">
+        <ul class="pagination mb-0">
+            <li class="page-item @(Model.HasPreviousPage ? string.Empty : "disabled")">
+                <a class="page-link" asp-action="Index" asp-route-page="@(Model.Page - 1)" asp-route-pageSize="@Model.PageSize">Anterior</a>
+            </li>
+
+            @{
+                var startPage = Math.Max(1, Model.Page - 2);
+                var endPage = Math.Min(Model.TotalPages, startPage + 4);
+                startPage = Math.Max(1, endPage - 4);
+            }
+
+            @for (var pageNumber = startPage; pageNumber <= endPage; pageNumber++)
+            {
+                <li class="page-item @(pageNumber == Model.Page ? "active" : string.Empty)">
+                    <a class="page-link" asp-action="Index" asp-route-page="@pageNumber" asp-route-pageSize="@Model.PageSize">@pageNumber</a>
+                </li>
+            }
+
+            <li class="page-item @(Model.HasNextPage ? string.Empty : "disabled")">
+                <a class="page-link" asp-action="Index" asp-route-page="@(Model.Page + 1)" asp-route-pageSize="@Model.PageSize">Siguiente</a>
+            </li>
+        </ul>
+    </nav>
 </div>
