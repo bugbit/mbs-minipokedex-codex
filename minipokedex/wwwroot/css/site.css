@@ -21,6 +21,12 @@ body {
   margin-bottom: 60px;
 }
 
+.pokemon-card-image {
+  height: 220px;
+  object-fit: contain;
+  background-color: #f8f9fa;
+}
+
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
   color: var(--bs-secondary-color);
   text-align: end;
