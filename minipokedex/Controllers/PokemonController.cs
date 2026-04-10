@@ -12,9 +12,10 @@ public sealed class PokemonController(IPokemonQueryService service) : Controller
         var result = await service.GetPokemonPageAsync(page, pageSize, cancellationToken);
 
         var viewModel = new PokemonIndexViewModel(
-            page,
-            pageSize,
-            result.Select(p => new PokemonListItemViewModel(p.Id, p.Name, p.SpriteUrl)).ToArray());
+            result.Page,
+            result.PageSize,
+            result.TotalCount,
+            result.Pokemon.Select(p => new PokemonListItemViewModel(p.Id, p.Name, p.SpriteUrl)).ToArray());
 
         return View(viewModel);
     }
