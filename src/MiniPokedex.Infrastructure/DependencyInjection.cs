@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using MiniPokedex.Application.Abstractions;
 using MiniPokedex.Application.Services;
 using MiniPokedex.Domain.Repositories;

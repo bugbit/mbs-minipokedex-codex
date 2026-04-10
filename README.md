@@ -20,4 +20,4 @@ dotnet run --project minipokedex/minipokedex.csproj
 
 ## Versión
 
-- `0.1.0`
+- `0.1.1`
