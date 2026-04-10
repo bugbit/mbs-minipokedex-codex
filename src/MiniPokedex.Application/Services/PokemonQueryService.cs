@@ -20,7 +20,7 @@ public sealed class PokemonQueryService(IPokemonRepository repository) : IPokemo
                 p.Id.Value,
                 p.Name,
                 p.SpriteUrl,
-                p.Abilities.Select(a => a.Name).ToArray()))
+                p.Abilities.Select(a => new PokemonSummaryAbilityDto(a.Name, a.IsHidden)).ToArray()))
             .ToArray();
 
         return new PokemonPageDto(
@@ -47,7 +47,7 @@ public sealed class PokemonQueryService(IPokemonRepository repository) : IPokemo
                 p.Id.Value,
                 p.Name,
                 p.SpriteUrl,
-                p.Abilities.Select(a => a.Name).ToArray()))
+                p.Abilities.Select(a => new PokemonSummaryAbilityDto(a.Name, a.IsHidden)).ToArray()))
             .ToArray();
 
         return new PokemonPageDto(

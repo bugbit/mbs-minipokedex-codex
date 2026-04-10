@@ -38,7 +38,9 @@
                         {
                             @foreach (var ability in pokemon.Abilities)
                             {
-                                <span class="badge text-bg-light border text-capitalize me-1">@ability</span>
+                                <span class="badge rounded-pill @(ability.IsHidden ? "text-bg-secondary" : "text-bg-primary") text-capitalize me-1 mb-1">
+                                    @ability.Name@(ability.IsHidden ? " (Oculta)" : string.Empty)
+                                </span>
                             }
                         }
                     </p>

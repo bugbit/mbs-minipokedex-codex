@@ -4,4 +4,6 @@ public sealed record PokemonListItemViewModel(
     int Id,
     string Name,
     string SpriteUrl,
-    IReadOnlyCollection<string> Abilities);
+    IReadOnlyCollection<PokemonAbilityListItemViewModel> Abilities);
+
+public sealed record PokemonAbilityListItemViewModel(string Name, bool IsHidden);
