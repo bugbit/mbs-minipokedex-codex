@@ -5,6 +5,11 @@ Todos los cambios notables de este proyecto se documentarán en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [0.1.3] - 2026-04-10
+### Fixed
+- Se desactiva la generación de `apphost.exe` en `minipokedex.csproj` (`UseAppHost=false`) para evitar el error `MSB4018 CreateAppHost` por acceso denegado al archivo `obj/Debug/net10.0/apphost.exe` en entornos Windows bloqueados.
+- Documentación técnica del ajuste en `/docs/004-fix-createapphost-access-denied.md`.
+
 ## [0.1.2] - 2026-04-10
 ### Added
 - Paginación real en la vista principal con navegación por números de página, estado activo y botones Anterior/Siguiente deshabilitados cuando corresponde.
