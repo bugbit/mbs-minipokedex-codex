@@ -5,6 +5,12 @@ Todos los cambios notables de este proyecto se documentarán en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [0.1.9] - 2026-04-10
+### Changed
+- Se muestran las habilidades de cada Pokémon directamente en las tarjetas del listado principal.
+- Se extiende el flujo Application/Web para transportar y renderizar `Abilities` desde el dominio hasta la vista de índice.
+- Se documenta el cambio técnico en `/docs/010-habilidades-en-listado-principal.md`.
+
 ## [0.1.8] - 2026-04-10
 ### Changed
 - Se estandariza el uso de constructores primarios para inyección de dependencias asignando cada parámetro a un campo `readonly` con prefijo `_` en Web/Application/Infrastructure.
