@@ -6,11 +6,18 @@
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="h3 mb-0">Pokedev</h1>
-    <form asp-controller="Pokemon" asp-action="Detail" method="get" class="d-flex gap-2">
+    <form asp-controller="Pokemon" asp-action="Search" method="get" class="d-flex gap-2">
         <input name="nameOrId" class="form-control" placeholder="Nombre o ID" />
         <button class="btn btn-primary" type="submit">Buscar</button>
     </form>
 </div>
+
+@if (TempData["SearchError"] is string searchError)
+{
+    <div class="alert alert-warning" role="alert">
+        @searchError
+    </div>
+}
 
 <div class="row row-cols-1 row-cols-md-3 g-3">
     @foreach (var pokemon in Model.Pokemon)

@@ -21,6 +21,25 @@ public sealed class PokemonController(IPokemonQueryService service) : Controller
     }
 
     [HttpGet]
+    public async Task<IActionResult> Search(string nameOrId, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(nameOrId))
+        {
+            TempData["SearchError"] = "Ingresa un nombre o ID para buscar.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        var pokemon = await service.GetPokemonAsync(nameOrId, cancellationToken);
+        if (pokemon is null)
+        {
+            TempData["SearchError"] = $"No se encontró ningún Pokémon para \"{nameOrId.Trim()}\".";
+            return RedirectToAction(nameof(Index));
+        }
+
+        return RedirectToAction(nameof(Detail), new { nameOrId = pokemon.Name });
+    }
+
+    [HttpGet]
     public async Task<IActionResult> Detail(string nameOrId, CancellationToken cancellationToken = default)
     {
         var pokemon = await service.GetPokemonAsync(nameOrId, cancellationToken);
