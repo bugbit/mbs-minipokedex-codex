@@ -12,3 +12,4 @@ dotnet new mvc -n minipokedex
 
 ## Codex:
 
+crea el código base completo para la pokedev.
