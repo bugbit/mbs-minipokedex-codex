@@ -4,6 +4,7 @@ public sealed record PokemonIndexViewModel(
     int Page,
     int PageSize,
     int TotalCount,
+    string? SearchTerm,
     IReadOnlyCollection<PokemonListItemViewModel> Pokemon)
 {
     public int TotalPages => TotalCount <= 0 ? 1 : (int)Math.Ceiling((double)TotalCount / PageSize);
