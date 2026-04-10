@@ -1,5 +1,17 @@
 # AGENTS.md
 
+## Build validation
+Antes de dar una tarea por terminada:
+
+1. Ejecuta `dotnet restore`
+2. Ejecuta `dotnet build --no-restore -c Debug`
+3. Si hay tests, ejecuta `dotnet test --no-build -c Debug`
+
+## Rules
+- No des una tarea por finalizada si el proyecto no compila.
+- Si cambias varios proyectos, compila la solución `.sln` si existe.
+- No cambies la versión del SDK salvo que sea necesario.
+
 ## Propósito
 
 Este repositorio contiene una **MiniPokedex** desarrollada en **ASP.NET Core MVC** sobre **.NET 10**.
