@@ -7,7 +7,7 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="h3 mb-0">Pokedev</h1>
     <form asp-controller="Pokemon" asp-action="Index" method="get" class="d-flex gap-2">
-        <input name="searchTerm" value="@Model.SearchTerm" class="form-control" placeholder="Nombre contiene..." />
+        <input name="searchTerm" value="@Model.SearchTerm" class="form-control" placeholder="Número exacto o nombre contiene..." />
         <button class="btn btn-primary" type="submit">Buscar</button>
     </form>
 </div>
@@ -15,7 +15,7 @@
 @if (!string.IsNullOrWhiteSpace(Model.SearchTerm) && Model.TotalCount == 0)
 {
     <div class="alert alert-warning" role="alert">
-        No se encontraron Pokémon que contengan "<strong>@Model.SearchTerm</strong>".
+        No se encontraron Pokémon para "<strong>@Model.SearchTerm</strong>".
     </div>
 }
 

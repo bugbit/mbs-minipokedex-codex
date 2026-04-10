@@ -5,6 +5,12 @@ Todos los cambios notables de este proyecto se documentarán en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [0.1.11] - 2026-04-10
+### Changed
+- La búsqueda del listado ahora interpreta términos numéricos como búsqueda por identificador de Pokémon (`id`) y mantiene búsqueda por contiene cuando el término es texto.
+- Se ajusta el mensaje/placeholder de búsqueda en la vista para reflejar el comportamiento mixto (número exacto o nombre contiene).
+- Se documenta el ajuste en `/docs/012-busqueda-mixta-id-o-nombre-contiene.md`.
+
 ## [0.1.10] - 2026-04-10
 ### Changed
 - Se alinea el estilo de habilidades del listado principal con el detalle: badges `rounded-pill`, color primario para habilidad normal y secundario para habilidad oculta.

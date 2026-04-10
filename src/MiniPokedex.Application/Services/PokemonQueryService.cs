@@ -32,16 +32,38 @@ public sealed class PokemonQueryService(IPokemonRepository repository) : IPokemo
 
     public async Task<PokemonPageDto> SearchPokemonByNameContainsAsync(string name, int page, int pageSize, CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrWhiteSpace(name))
-        {
-            return new PokemonPageDto(1, Math.Clamp(pageSize, 1, 50), 0, []);
-        }
-
         var normalizedPage = Math.Max(page, 1);
         var normalizedPageSize = Math.Clamp(pageSize, 1, 50);
-        var offset = (normalizedPage - 1) * normalizedPageSize;
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            return new PokemonPageDto(normalizedPage, normalizedPageSize, 0, []);
+        }
 
-        var pokemonPage = await _repository.SearchByNameContainsAsync(name.Trim(), normalizedPageSize, offset, cancellationToken);
+        var normalizedTerm = name.Trim();
+        if (int.TryParse(normalizedTerm, out _))
+        {
+            var pokemonById = await _repository.GetByNameOrIdAsync(normalizedTerm, cancellationToken);
+            if (pokemonById is null)
+            {
+                return new PokemonPageDto(normalizedPage, normalizedPageSize, 0, []);
+            }
+
+            var numericSearchResults = normalizedPage == 1
+                ? new[]
+                {
+                    new PokemonSummaryDto(
+                        pokemonById.Id.Value,
+                        pokemonById.Name,
+                        pokemonById.SpriteUrl,
+                        pokemonById.Abilities.Select(a => new PokemonSummaryAbilityDto(a.Name, a.IsHidden)).ToArray())
+                }
+                : [];
+
+            return new PokemonPageDto(normalizedPage, normalizedPageSize, 1, numericSearchResults);
+        }
+
+        var offset = (normalizedPage - 1) * normalizedPageSize;
+        var pokemonPage = await _repository.SearchByNameContainsAsync(normalizedTerm, normalizedPageSize, offset, cancellationToken);
         var pokemon = pokemonPage.Pokemon
             .Select(p => new PokemonSummaryDto(
                 p.Id.Value,
