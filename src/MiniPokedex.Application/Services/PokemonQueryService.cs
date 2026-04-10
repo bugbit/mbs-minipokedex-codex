@@ -24,6 +24,29 @@ public sealed class PokemonQueryService(IPokemonRepository repository) : IPokemo
             pokemon);
     }
 
+    public async Task<PokemonPageDto> SearchPokemonByNameContainsAsync(string name, int page, int pageSize, CancellationToken cancellationToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            return new PokemonPageDto(1, Math.Clamp(pageSize, 1, 50), 0, []);
+        }
+
+        var normalizedPage = Math.Max(page, 1);
+        var normalizedPageSize = Math.Clamp(pageSize, 1, 50);
+        var offset = (normalizedPage - 1) * normalizedPageSize;
+
+        var pokemonPage = await repository.SearchByNameContainsAsync(name.Trim(), normalizedPageSize, offset, cancellationToken);
+        var pokemon = pokemonPage.Pokemon
+            .Select(p => new PokemonSummaryDto(p.Id.Value, p.Name, p.SpriteUrl))
+            .ToArray();
+
+        return new PokemonPageDto(
+            normalizedPage,
+            normalizedPageSize,
+            pokemonPage.TotalCount,
+            pokemon);
+    }
+
     public async Task<PokemonDetailDto?> GetPokemonAsync(string nameOrId, CancellationToken cancellationToken = default)
     {
         if (string.IsNullOrWhiteSpace(nameOrId))

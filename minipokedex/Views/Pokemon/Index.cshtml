@@ -6,16 +6,16 @@
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="h3 mb-0">Pokedev</h1>
-    <form asp-controller="Pokemon" asp-action="Search" method="get" class="d-flex gap-2">
-        <input name="nameOrId" class="form-control" placeholder="Nombre o ID" />
+    <form asp-controller="Pokemon" asp-action="Index" method="get" class="d-flex gap-2">
+        <input name="searchTerm" value="@Model.SearchTerm" class="form-control" placeholder="Nombre contiene..." />
         <button class="btn btn-primary" type="submit">Buscar</button>
     </form>
 </div>
 
-@if (TempData["SearchError"] is string searchError)
+@if (!string.IsNullOrWhiteSpace(Model.SearchTerm) && Model.TotalCount == 0)
 {
     <div class="alert alert-warning" role="alert">
-        @searchError
+        No se encontraron Pokémon que contengan "<strong>@Model.SearchTerm</strong>".
     </div>
 }
 
@@ -43,7 +43,7 @@
     <nav aria-label="Paginación de Pokémon">
         <ul class="pagination mb-0">
             <li class="page-item @(Model.HasPreviousPage ? string.Empty : "disabled")">
-                <a class="page-link" asp-action="Index" asp-route-page="@(Model.Page - 1)" asp-route-pageSize="@Model.PageSize">Anterior</a>
+                <a class="page-link" asp-action="Index" asp-route-searchTerm="@Model.SearchTerm" asp-route-page="@(Model.Page - 1)" asp-route-pageSize="@Model.PageSize">Anterior</a>
             </li>
 
             @{
@@ -55,12 +55,12 @@
             @for (var pageNumber = startPage; pageNumber <= endPage; pageNumber++)
             {
                 <li class="page-item @(pageNumber == Model.Page ? "active" : string.Empty)">
-                    <a class="page-link" asp-action="Index" asp-route-page="@pageNumber" asp-route-pageSize="@Model.PageSize">@pageNumber</a>
+                    <a class="page-link" asp-action="Index" asp-route-searchTerm="@Model.SearchTerm" asp-route-page="@pageNumber" asp-route-pageSize="@Model.PageSize">@pageNumber</a>
                 </li>
             }
 
             <li class="page-item @(Model.HasNextPage ? string.Empty : "disabled")">
-                <a class="page-link" asp-action="Index" asp-route-page="@(Model.Page + 1)" asp-route-pageSize="@Model.PageSize">Siguiente</a>
+                <a class="page-link" asp-action="Index" asp-route-searchTerm="@Model.SearchTerm" asp-route-page="@(Model.Page + 1)" asp-route-pageSize="@Model.PageSize">Siguiente</a>
             </li>
         </ul>
     </nav>

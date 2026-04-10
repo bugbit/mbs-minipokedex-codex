@@ -5,6 +5,15 @@ Todos los cambios notables de este proyecto se documentarán en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [0.1.6] - 2026-04-10
+### Changed
+- La búsqueda del listado ahora funciona por **contiene** sobre nombre (`searchTerm`) en lugar de requerir coincidencia exacta.
+- Se mantiene la paginación cuando hay término de búsqueda, preservando `searchTerm` entre páginas.
+
+### Fixed
+- Se elimina el flujo de redirección a detalle para búsqueda general y se muestran resultados filtrados directamente en el listado.
+- Documentación técnica del ajuste en `/docs/007-busqueda-por-contiene.md`.
+
 ## [0.1.5] - 2026-04-10
 ### Fixed
 - Se corrige el flujo de búsqueda en `PokemonController` agregando una acción `Search` que valida entrada vacía y evita respuestas 404 directas al usuario.

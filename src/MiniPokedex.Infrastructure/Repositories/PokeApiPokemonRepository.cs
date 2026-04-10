@@ -7,6 +7,8 @@ namespace MiniPokedex.Infrastructure.Repositories;
 
 public sealed class PokeApiPokemonRepository(IPokeApiClient client) : IPokemonRepository
 {
+    private const int MaxPokemonListLimit = 2000;
+
     public async Task<PokemonPageResult> GetPokemonPageAsync(int limit, int offset, CancellationToken cancellationToken = default)
     {
         var listResponse = await client.GetPokemonListAsync(limit, offset, cancellationToken);
@@ -27,6 +29,47 @@ public sealed class PokeApiPokemonRepository(IPokeApiClient client) : IPokemonRe
             .ToArray();
 
         return new PokemonPageResult(listResponse.Count, pokemon);
+    }
+
+    public async Task<PokemonPageResult> SearchByNameContainsAsync(string name, int limit, int offset, CancellationToken cancellationToken = default)
+    {
+        var normalizedName = name.Trim();
+        if (string.IsNullOrWhiteSpace(normalizedName))
+        {
+            return new PokemonPageResult(0, []);
+        }
+
+        var listResponse = await client.GetPokemonListAsync(MaxPokemonListLimit, 0, cancellationToken);
+        if (listResponse?.Results.Count is not > 0)
+        {
+            return new PokemonPageResult(0, []);
+        }
+
+        var matchedNames = listResponse.Results
+            .Where(item => !string.IsNullOrWhiteSpace(item.Name))
+            .Select(item => item.Name)
+            .Where(itemName => itemName.Contains(normalizedName, StringComparison.OrdinalIgnoreCase))
+            .ToArray();
+
+        var totalCount = matchedNames.Length;
+        if (totalCount == 0)
+        {
+            return new PokemonPageResult(0, []);
+        }
+
+        var pageNames = matchedNames
+            .Skip(offset)
+            .Take(limit)
+            .ToArray();
+
+        var details = await Task.WhenAll(pageNames.Select(pageName => client.GetPokemonByNameOrIdAsync(pageName, cancellationToken)));
+
+        var pokemon = details
+            .Where(detail => detail is not null)
+            .Select(detail => ToDomain(detail!))
+            .ToArray();
+
+        return new PokemonPageResult(totalCount, pokemon);
     }
 
     public async Task<Pokemon?> GetByNameOrIdAsync(string nameOrId, CancellationToken cancellationToken = default)
