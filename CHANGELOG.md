@@ -5,6 +5,15 @@ Todos los cambios notables de este proyecto se documentarán en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [0.1.12] - 2026-04-10
+### Added
+- La página principal incluye selector para alternar entre vista tipo `Cards` y vista tipo `Lista`.
+
+### Changed
+- La acción `Index` preserva y valida el parámetro `viewMode` (`card`/`list`) para mantener el modo durante búsqueda y paginación.
+- Se agrega renderizado condicional en la vista principal y estilos para tabla/listado compacto.
+- Se documenta el cambio en `/docs/013-modo-lista-y-card-en-pagina-principal.md`.
+
 ## [0.1.11] - 2026-04-10
 ### Changed
 - La búsqueda del listado ahora interpreta términos numéricos como búsqueda por identificador de Pokémon (`id`) y mantiene búsqueda por contiene cuando el término es texto.

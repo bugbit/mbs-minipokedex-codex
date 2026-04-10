@@ -27,6 +27,19 @@ body {
   background-color: #f8f9fa;
 }
 
+.pokemon-list-view {
+  min-width: 720px;
+}
+
+.pokemon-list-image {
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  height: 56px;
+  object-fit: contain;
+  padding: 0.35rem;
+  width: 56px;
+}
+
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
   color: var(--bs-secondary-color);
   text-align: end;

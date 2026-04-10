@@ -7,15 +7,18 @@ namespace minipokedex.Controllers;
 public sealed class PokemonController(IPokemonQueryService service) : Controller
 {
     private readonly IPokemonQueryService _service = service;
+    private static readonly string[] SupportedViewModes = ["card", "list"];
 
     [HttpGet]
     public async Task<IActionResult> Index(
         string? searchTerm,
+        string? viewMode,
         int page = 1,
         int pageSize = 12,
         CancellationToken cancellationToken = default)
     {
         var normalizedSearchTerm = string.IsNullOrWhiteSpace(searchTerm) ? null : searchTerm.Trim();
+        var normalizedViewMode = NormalizeViewMode(viewMode);
         var result = normalizedSearchTerm is null
             ? await _service.GetPokemonPageAsync(page, pageSize, cancellationToken)
             : await _service.SearchPokemonByNameContainsAsync(normalizedSearchTerm, page, pageSize, cancellationToken);
@@ -25,6 +28,7 @@ public sealed class PokemonController(IPokemonQueryService service) : Controller
             result.PageSize,
             result.TotalCount,
             normalizedSearchTerm,
+            normalizedViewMode,
             result.Pokemon
                 .Select(p => new PokemonListItemViewModel(
                     p.Id,
@@ -34,6 +38,17 @@ public sealed class PokemonController(IPokemonQueryService service) : Controller
                 .ToArray());
 
         return View(viewModel);
+    }
+
+    private static string NormalizeViewMode(string? viewMode)
+    {
+        if (string.IsNullOrWhiteSpace(viewMode))
+        {
+            return "card";
+        }
+
+        var normalized = viewMode.Trim().ToLowerInvariant();
+        return SupportedViewModes.Contains(normalized) ? normalized : "card";
     }
 
     [HttpGet]
