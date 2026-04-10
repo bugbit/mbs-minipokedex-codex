@@ -27,6 +27,21 @@ public sealed class PokeApiSprites
 {
     [JsonPropertyName("front_default")]
     public string? FrontDefault { get; set; }
+
+    [JsonPropertyName("other")]
+    public PokeApiOtherSprites? Other { get; set; }
+}
+
+public sealed class PokeApiOtherSprites
+{
+    [JsonPropertyName("official-artwork")]
+    public PokeApiOfficialArtworkSprites? OfficialArtwork { get; set; }
+}
+
+public sealed class PokeApiOfficialArtworkSprites
+{
+    [JsonPropertyName("front_default")]
+    public string? FrontDefault { get; set; }
 }
 
 public sealed class PokeApiTypeSlot

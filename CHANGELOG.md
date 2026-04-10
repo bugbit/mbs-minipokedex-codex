@@ -5,6 +5,12 @@ Todos los cambios notables de este proyecto se documentarán en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [0.1.4] - 2026-04-10
+### Fixed
+- Se mejora la visualización de imágenes en tarjetas del listado al priorizar `sprites.other.official-artwork.front_default` de PokeAPI y usar `sprites.front_default` como fallback.
+- Se ajusta el estilo CSS de la imagen en tarjetas para mantener tamaño consistente y fondo neutro en el listado.
+- Documentación técnica del ajuste en `/docs/005-fix-imagenes-pokemon-listado.md`.
+
 ## [0.1.3] - 2026-04-10
 ### Fixed
 - Se desactiva la generación de `apphost.exe` en `minipokedex.csproj` (`UseAppHost=false`) para evitar el error `MSB4018 CreateAppHost` por acceso denegado al archivo `obj/Debug/net10.0/apphost.exe` en entornos Windows bloqueados.

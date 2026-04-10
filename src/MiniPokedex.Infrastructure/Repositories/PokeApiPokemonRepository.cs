@@ -41,6 +41,8 @@ public sealed class PokeApiPokemonRepository(IPokeApiClient client) : IPokemonRe
             dto.Name,
             dto.Height,
             dto.Weight,
-            dto.Sprites.FrontDefault ?? string.Empty,
+            dto.Sprites.Other?.OfficialArtwork?.FrontDefault
+                ?? dto.Sprites.FrontDefault
+                ?? string.Empty,
             dto.Types.Select(t => new PokemonType(t.Type.Name)).ToArray());
 }
