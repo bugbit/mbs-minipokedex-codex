@@ -11,7 +11,7 @@ chmod +x /tmp/dotnet-install.sh
 
 echo "==> Installing .NET 10 preview SDK"
 mkdir -p "$HOME/.dotnet"
-/tmp/dotnet-install.sh --channel 10.0 --quality preview --install-dir "$HOME/.dotnet"
+/tmp/dotnet-install.sh --channel 10.0 --install-dir "$HOME/.dotnet"
 
 echo "==> Exporting PATH"
 {
