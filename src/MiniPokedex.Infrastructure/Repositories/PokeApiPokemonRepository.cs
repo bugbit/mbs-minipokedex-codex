@@ -8,10 +8,11 @@ namespace MiniPokedex.Infrastructure.Repositories;
 public sealed class PokeApiPokemonRepository(IPokeApiClient client) : IPokemonRepository
 {
     private const int MaxPokemonListLimit = 2000;
+    private readonly IPokeApiClient _client = client;
 
     public async Task<PokemonPageResult> GetPokemonPageAsync(int limit, int offset, CancellationToken cancellationToken = default)
     {
-        var listResponse = await client.GetPokemonListAsync(limit, offset, cancellationToken);
+        var listResponse = await _client.GetPokemonListAsync(limit, offset, cancellationToken);
         if (listResponse?.Results.Count is not > 0)
         {
             return new PokemonPageResult(listResponse?.Count ?? 0, []);
@@ -19,7 +20,7 @@ public sealed class PokeApiPokemonRepository(IPokeApiClient client) : IPokemonRe
 
         var tasks = listResponse.Results
             .Where(item => !string.IsNullOrWhiteSpace(item.Name))
-            .Select(item => client.GetPokemonByNameOrIdAsync(item.Name, cancellationToken));
+            .Select(item => _client.GetPokemonByNameOrIdAsync(item.Name, cancellationToken));
 
         var details = await Task.WhenAll(tasks);
 
@@ -39,7 +40,7 @@ public sealed class PokeApiPokemonRepository(IPokeApiClient client) : IPokemonRe
             return new PokemonPageResult(0, []);
         }
 
-        var listResponse = await client.GetPokemonListAsync(MaxPokemonListLimit, 0, cancellationToken);
+        var listResponse = await _client.GetPokemonListAsync(MaxPokemonListLimit, 0, cancellationToken);
         if (listResponse?.Results.Count is not > 0)
         {
             return new PokemonPageResult(0, []);
@@ -62,7 +63,7 @@ public sealed class PokeApiPokemonRepository(IPokeApiClient client) : IPokemonRe
             .Take(limit)
             .ToArray();
 
-        var details = await Task.WhenAll(pageNames.Select(pageName => client.GetPokemonByNameOrIdAsync(pageName, cancellationToken)));
+        var details = await Task.WhenAll(pageNames.Select(pageName => _client.GetPokemonByNameOrIdAsync(pageName, cancellationToken)));
 
         var pokemon = details
             .Where(detail => detail is not null)
@@ -74,7 +75,7 @@ public sealed class PokeApiPokemonRepository(IPokeApiClient client) : IPokemonRe
 
     public async Task<Pokemon?> GetByNameOrIdAsync(string nameOrId, CancellationToken cancellationToken = default)
     {
-        var detail = await client.GetPokemonByNameOrIdAsync(nameOrId, cancellationToken);
+        var detail = await _client.GetPokemonByNameOrIdAsync(nameOrId, cancellationToken);
         return detail is null ? null : ToDomain(detail);
     }
 

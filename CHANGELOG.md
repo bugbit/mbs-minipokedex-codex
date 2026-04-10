@@ -5,6 +5,12 @@ Todos los cambios notables de este proyecto se documentarán en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [0.1.8] - 2026-04-10
+### Changed
+- Se estandariza el uso de constructores primarios para inyección de dependencias asignando cada parámetro a un campo `readonly` con prefijo `_` en Web/Application/Infrastructure.
+- Se agrega la regla de constructores primarios en `CLAUDE.md` para mantener el criterio consistente en cambios futuros.
+- Se documenta el cambio técnico en `/docs/009-constructores-primarios-inyeccion-dependencias.md`.
+
 ## [0.1.7] - 2026-04-10
 ### Changed
 - Se rediseña la vista de detalle de Pokémon para alinearla con el layout solicitado (cabecera, badges de tipo, bloque de métricas, habilidades y estadísticas base con barras visuales).
