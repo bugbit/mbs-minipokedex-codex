@@ -6,6 +6,8 @@ namespace minipokedex.Controllers;
 
 public sealed class PokemonController(IPokemonQueryService service) : Controller
 {
+    private readonly IPokemonQueryService _service = service;
+
     [HttpGet]
     public async Task<IActionResult> Index(
         string? searchTerm,
@@ -15,8 +17,8 @@ public sealed class PokemonController(IPokemonQueryService service) : Controller
     {
         var normalizedSearchTerm = string.IsNullOrWhiteSpace(searchTerm) ? null : searchTerm.Trim();
         var result = normalizedSearchTerm is null
-            ? await service.GetPokemonPageAsync(page, pageSize, cancellationToken)
-            : await service.SearchPokemonByNameContainsAsync(normalizedSearchTerm, page, pageSize, cancellationToken);
+            ? await _service.GetPokemonPageAsync(page, pageSize, cancellationToken)
+            : await _service.SearchPokemonByNameContainsAsync(normalizedSearchTerm, page, pageSize, cancellationToken);
 
         var viewModel = new PokemonIndexViewModel(
             result.Page,
@@ -31,7 +33,7 @@ public sealed class PokemonController(IPokemonQueryService service) : Controller
     [HttpGet]
     public async Task<IActionResult> Detail(string nameOrId, CancellationToken cancellationToken = default)
     {
-        var pokemon = await service.GetPokemonAsync(nameOrId, cancellationToken);
+        var pokemon = await _service.GetPokemonAsync(nameOrId, cancellationToken);
         if (pokemon is null)
         {
             return NotFound();

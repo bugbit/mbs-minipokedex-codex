@@ -6,14 +6,16 @@ namespace MiniPokedex.Infrastructure.Clients;
 
 public sealed class PokeApiClient(HttpClient httpClient) : IPokeApiClient
 {
+    private readonly HttpClient _httpClient = httpClient;
+
     public Task<PokeApiPokemonListResponse?> GetPokemonListAsync(int limit, int offset, CancellationToken cancellationToken = default) =>
-        httpClient.GetFromJsonAsync<PokeApiPokemonListResponse>($"pokemon?limit={limit}&offset={offset}", cancellationToken);
+        _httpClient.GetFromJsonAsync<PokeApiPokemonListResponse>($"pokemon?limit={limit}&offset={offset}", cancellationToken);
 
     public async Task<PokeApiPokemonDetailResponse?> GetPokemonByNameOrIdAsync(string nameOrId, CancellationToken cancellationToken = default)
     {
         try
         {
-            return await httpClient.GetFromJsonAsync<PokeApiPokemonDetailResponse>($"pokemon/{nameOrId.ToLowerInvariant()}", cancellationToken);
+            return await _httpClient.GetFromJsonAsync<PokeApiPokemonDetailResponse>($"pokemon/{nameOrId.ToLowerInvariant()}", cancellationToken);
         }
         catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
         {

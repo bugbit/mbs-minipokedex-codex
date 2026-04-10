@@ -6,13 +6,15 @@ namespace MiniPokedex.Application.Services;
 
 public sealed class PokemonQueryService(IPokemonRepository repository) : IPokemonQueryService
 {
+    private readonly IPokemonRepository _repository = repository;
+
     public async Task<PokemonPageDto> GetPokemonPageAsync(int page, int pageSize, CancellationToken cancellationToken = default)
     {
         var normalizedPage = Math.Max(page, 1);
         var normalizedPageSize = Math.Clamp(pageSize, 1, 50);
         var offset = (normalizedPage - 1) * normalizedPageSize;
 
-        var pokemonPage = await repository.GetPokemonPageAsync(normalizedPageSize, offset, cancellationToken);
+        var pokemonPage = await _repository.GetPokemonPageAsync(normalizedPageSize, offset, cancellationToken);
         var pokemon = pokemonPage.Pokemon
             .Select(p => new PokemonSummaryDto(p.Id.Value, p.Name, p.SpriteUrl))
             .ToArray();
@@ -35,7 +37,7 @@ public sealed class PokemonQueryService(IPokemonRepository repository) : IPokemo
         var normalizedPageSize = Math.Clamp(pageSize, 1, 50);
         var offset = (normalizedPage - 1) * normalizedPageSize;
 
-        var pokemonPage = await repository.SearchByNameContainsAsync(name.Trim(), normalizedPageSize, offset, cancellationToken);
+        var pokemonPage = await _repository.SearchByNameContainsAsync(name.Trim(), normalizedPageSize, offset, cancellationToken);
         var pokemon = pokemonPage.Pokemon
             .Select(p => new PokemonSummaryDto(p.Id.Value, p.Name, p.SpriteUrl))
             .ToArray();
@@ -54,7 +56,7 @@ public sealed class PokemonQueryService(IPokemonRepository repository) : IPokemo
             return null;
         }
 
-        var pokemon = await repository.GetByNameOrIdAsync(nameOrId.Trim(), cancellationToken);
+        var pokemon = await _repository.GetByNameOrIdAsync(nameOrId.Trim(), cancellationToken);
         if (pokemon is null)
         {
             return null;
