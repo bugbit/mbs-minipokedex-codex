@@ -5,5 +5,13 @@ public sealed record PokemonDetailViewModel(
     string Name,
     int Height,
     int Weight,
+    int BaseExperience,
     string SpriteUrl,
-    IReadOnlyCollection<string> Types);
+    string? ShinySpriteUrl,
+    IReadOnlyCollection<string> Types,
+    IReadOnlyCollection<PokemonAbilityViewModel> Abilities,
+    IReadOnlyCollection<PokemonBaseStatViewModel> BaseStats);
+
+public sealed record PokemonAbilityViewModel(string Name, bool IsHidden);
+
+public sealed record PokemonBaseStatViewModel(string Name, int Value);

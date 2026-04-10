@@ -65,7 +65,11 @@ public sealed class PokemonQueryService(IPokemonRepository repository) : IPokemo
             pokemon.Name,
             pokemon.Height,
             pokemon.Weight,
+            pokemon.BaseExperience,
             pokemon.SpriteUrl,
-            pokemon.Types.Select(t => t.Name).ToArray());
+            pokemon.ShinySpriteUrl,
+            pokemon.Types.Select(t => t.Name).ToArray(),
+            pokemon.Abilities.Select(a => new PokemonAbilityDto(a.Name, a.IsHidden)).ToArray(),
+            pokemon.BaseStats.Select(s => new PokemonBaseStatDto(s.Name, s.Value)).ToArray());
     }
 }

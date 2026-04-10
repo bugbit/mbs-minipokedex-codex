@@ -84,8 +84,19 @@ public sealed class PokeApiPokemonRepository(IPokeApiClient client) : IPokemonRe
             dto.Name,
             dto.Height,
             dto.Weight,
+            dto.BaseExperience,
             dto.Sprites.Other?.OfficialArtwork?.FrontDefault
                 ?? dto.Sprites.FrontDefault
                 ?? string.Empty,
-            dto.Types.Select(t => new PokemonType(t.Type.Name)).ToArray());
+            dto.Sprites.Other?.OfficialArtwork?.FrontShiny
+                ?? dto.Sprites.FrontShiny,
+            dto.Types.Select(t => new PokemonType(t.Type.Name)).ToArray(),
+            dto.Abilities
+                .Where(a => !string.IsNullOrWhiteSpace(a.Ability.Name))
+                .Select(a => new PokemonAbility(a.Ability.Name, a.IsHidden))
+                .ToArray(),
+            dto.Stats
+                .Where(s => !string.IsNullOrWhiteSpace(s.Stat.Name))
+                .Select(s => new PokemonBaseStat(s.Stat.Name, s.BaseStat))
+                .ToArray());
 }

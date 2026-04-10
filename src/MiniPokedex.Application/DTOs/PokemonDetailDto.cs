@@ -5,5 +5,13 @@ public sealed record PokemonDetailDto(
     string Name,
     int Height,
     int Weight,
+    int BaseExperience,
     string SpriteUrl,
-    IReadOnlyCollection<string> Types);
+    string? ShinySpriteUrl,
+    IReadOnlyCollection<string> Types,
+    IReadOnlyCollection<PokemonAbilityDto> Abilities,
+    IReadOnlyCollection<PokemonBaseStatDto> BaseStats);
+
+public sealed record PokemonAbilityDto(string Name, bool IsHidden);
+
+public sealed record PokemonBaseStatDto(string Name, int Value);
