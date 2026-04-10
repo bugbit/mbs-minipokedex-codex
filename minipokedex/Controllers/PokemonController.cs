@@ -25,7 +25,13 @@ public sealed class PokemonController(IPokemonQueryService service) : Controller
             result.PageSize,
             result.TotalCount,
             normalizedSearchTerm,
-            result.Pokemon.Select(p => new PokemonListItemViewModel(p.Id, p.Name, p.SpriteUrl)).ToArray());
+            result.Pokemon
+                .Select(p => new PokemonListItemViewModel(
+                    p.Id,
+                    p.Name,
+                    p.SpriteUrl,
+                    p.Abilities.Select(a => new PokemonAbilityListItemViewModel(a.Name, a.IsHidden)).ToArray()))
+                .ToArray());
 
         return View(viewModel);
     }

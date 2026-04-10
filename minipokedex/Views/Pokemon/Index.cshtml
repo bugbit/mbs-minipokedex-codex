@@ -28,6 +28,22 @@
                 <div class="card-body">
                     <h2 class="h5 text-capitalize">@pokemon.Name</h2>
                     <p class="text-muted mb-2">#@pokemon.Id</p>
+                    <p class="mb-2">
+                        <small class="text-muted d-block mb-1">Habilidades</small>
+                        @if (pokemon.Abilities.Count == 0)
+                        {
+                            <span class="text-muted small">Sin habilidades registradas</span>
+                        }
+                        else
+                        {
+                            @foreach (var ability in pokemon.Abilities)
+                            {
+                                <span class="badge rounded-pill @(ability.IsHidden ? "text-bg-secondary" : "text-bg-primary") text-capitalize me-1 mb-1">
+                                    @ability.Name@(ability.IsHidden ? " (Oculta)" : string.Empty)
+                                </span>
+                            }
+                        }
+                    </p>
                     <a class="btn btn-outline-primary btn-sm" asp-controller="Pokemon" asp-action="Detail" asp-route-nameOrId="@pokemon.Name">Ver detalle</a>
                 </div>
             </div>

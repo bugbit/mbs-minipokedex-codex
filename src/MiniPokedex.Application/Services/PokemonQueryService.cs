@@ -16,7 +16,11 @@ public sealed class PokemonQueryService(IPokemonRepository repository) : IPokemo
 
         var pokemonPage = await _repository.GetPokemonPageAsync(normalizedPageSize, offset, cancellationToken);
         var pokemon = pokemonPage.Pokemon
-            .Select(p => new PokemonSummaryDto(p.Id.Value, p.Name, p.SpriteUrl))
+            .Select(p => new PokemonSummaryDto(
+                p.Id.Value,
+                p.Name,
+                p.SpriteUrl,
+                p.Abilities.Select(a => new PokemonSummaryAbilityDto(a.Name, a.IsHidden)).ToArray()))
             .ToArray();
 
         return new PokemonPageDto(
@@ -39,7 +43,11 @@ public sealed class PokemonQueryService(IPokemonRepository repository) : IPokemo
 
         var pokemonPage = await _repository.SearchByNameContainsAsync(name.Trim(), normalizedPageSize, offset, cancellationToken);
         var pokemon = pokemonPage.Pokemon
-            .Select(p => new PokemonSummaryDto(p.Id.Value, p.Name, p.SpriteUrl))
+            .Select(p => new PokemonSummaryDto(
+                p.Id.Value,
+                p.Name,
+                p.SpriteUrl,
+                p.Abilities.Select(a => new PokemonSummaryAbilityDto(a.Name, a.IsHidden)).ToArray()))
             .ToArray();
 
         return new PokemonPageDto(
