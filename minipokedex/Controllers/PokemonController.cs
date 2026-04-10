@@ -42,7 +42,11 @@ public sealed class PokemonController(IPokemonQueryService service) : Controller
             pokemon.Name,
             pokemon.Height,
             pokemon.Weight,
+            pokemon.BaseExperience,
             pokemon.SpriteUrl,
-            pokemon.Types));
+            pokemon.ShinySpriteUrl,
+            pokemon.Types,
+            pokemon.Abilities.Select(a => new PokemonAbilityViewModel(a.Name, a.IsHidden)).ToArray(),
+            pokemon.BaseStats.Select(s => new PokemonBaseStatViewModel(s.Name, s.Value)).ToArray()));
     }
 }

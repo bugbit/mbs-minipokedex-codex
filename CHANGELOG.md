@@ -5,6 +5,12 @@ Todos los cambios notables de este proyecto se documentarán en este archivo.
 El formato está basado en [Keep a Changelog](https://keepachangelog.com/es-ES/1.0.0/),
 y este proyecto adhiere a [Semantic Versioning](https://semver.org/lang/es/).
 
+## [0.1.7] - 2026-04-10
+### Changed
+- Se rediseña la vista de detalle de Pokémon para alinearla con el layout solicitado (cabecera, badges de tipo, bloque de métricas, habilidades y estadísticas base con barras visuales).
+- Se amplía el flujo de detalle en Domain/Application/Infrastructure para incluir `base_experience`, `abilities`, `stats` y sprite shiny desde PokeAPI.
+- Se agrega documentación técnica del cambio en `/docs/008-rediseno-detalle-pokemon.md`.
+
 ## [0.1.6] - 2026-04-10
 ### Changed
 - La búsqueda del listado ahora funciona por **contiene** sobre nombre (`searchTerm`) en lugar de requerir coincidencia exacta.
