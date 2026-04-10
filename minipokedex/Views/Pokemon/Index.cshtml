@@ -7,9 +7,27 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1 class="h3 mb-0">Pokedev</h1>
     <form asp-controller="Pokemon" asp-action="Index" method="get" class="d-flex gap-2">
+        <input type="hidden" name="viewMode" value="@Model.ViewMode" />
         <input name="searchTerm" value="@Model.SearchTerm" class="form-control" placeholder="Número exacto o nombre contiene..." />
         <button class="btn btn-primary" type="submit">Buscar</button>
     </form>
+</div>
+
+<div class="d-flex justify-content-end mb-3">
+    <div class="btn-group" role="group" aria-label="Cambiar vista">
+        <a class="btn @(Model.IsCardView ? "btn-primary" : "btn-outline-primary")"
+           asp-action="Index"
+           asp-route-searchTerm="@Model.SearchTerm"
+           asp-route-viewMode="card"
+           asp-route-page="1"
+           asp-route-pageSize="@Model.PageSize">Cards</a>
+        <a class="btn @(Model.IsListView ? "btn-primary" : "btn-outline-primary")"
+           asp-action="Index"
+           asp-route-searchTerm="@Model.SearchTerm"
+           asp-route-viewMode="list"
+           asp-route-page="1"
+           asp-route-pageSize="@Model.PageSize">Lista</a>
+    </div>
 </div>
 
 @if (!string.IsNullOrWhiteSpace(Model.SearchTerm) && Model.TotalCount == 0)
@@ -19,37 +37,87 @@
     </div>
 }
 
-<div class="row row-cols-1 row-cols-md-3 g-3">
-    @foreach (var pokemon in Model.Pokemon)
-    {
-        <div class="col">
-            <div class="card h-100 shadow-sm">
-                <img src="@pokemon.SpriteUrl" class="card-img-top pokemon-card-image p-3" alt="@pokemon.Name" />
-                <div class="card-body">
-                    <h2 class="h5 text-capitalize">@pokemon.Name</h2>
-                    <p class="text-muted mb-2">#@pokemon.Id</p>
-                    <p class="mb-2">
-                        <small class="text-muted d-block mb-1">Habilidades</small>
-                        @if (pokemon.Abilities.Count == 0)
-                        {
-                            <span class="text-muted small">Sin habilidades registradas</span>
-                        }
-                        else
-                        {
-                            @foreach (var ability in pokemon.Abilities)
+@if (Model.IsCardView)
+{
+    <div class="row row-cols-1 row-cols-md-3 g-3">
+        @foreach (var pokemon in Model.Pokemon)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <img src="@pokemon.SpriteUrl" class="card-img-top pokemon-card-image p-3" alt="@pokemon.Name" />
+                    <div class="card-body">
+                        <h2 class="h5 text-capitalize">@pokemon.Name</h2>
+                        <p class="text-muted mb-2">#@pokemon.Id</p>
+                        <p class="mb-2">
+                            <small class="text-muted d-block mb-1">Habilidades</small>
+                            @if (pokemon.Abilities.Count == 0)
                             {
-                                <span class="badge rounded-pill @(ability.IsHidden ? "text-bg-secondary" : "text-bg-primary") text-capitalize me-1 mb-1">
-                                    @ability.Name@(ability.IsHidden ? " (Oculta)" : string.Empty)
-                                </span>
+                                <span class="text-muted small">Sin habilidades registradas</span>
                             }
-                        }
-                    </p>
-                    <a class="btn btn-outline-primary btn-sm" asp-controller="Pokemon" asp-action="Detail" asp-route-nameOrId="@pokemon.Name">Ver detalle</a>
+                            else
+                            {
+                                @foreach (var ability in pokemon.Abilities)
+                                {
+                                    <span class="badge rounded-pill @(ability.IsHidden ? "text-bg-secondary" : "text-bg-primary") text-capitalize me-1 mb-1">
+                                        @ability.Name@(ability.IsHidden ? " (Oculta)" : string.Empty)
+                                    </span>
+                                }
+                            }
+                        </p>
+                        <a class="btn btn-outline-primary btn-sm" asp-controller="Pokemon" asp-action="Detail" asp-route-nameOrId="@pokemon.Name">Ver detalle</a>
+                    </div>
                 </div>
             </div>
-        </div>
-    }
-</div>
+        }
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover align-middle pokemon-list-view">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Pokémon</th>
+                    <th scope="col">Habilidades</th>
+                    <th scope="col" class="text-end">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var pokemon in Model.Pokemon)
+                {
+                    <tr>
+                        <th scope="row" class="text-muted">@pokemon.Id</th>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="@pokemon.SpriteUrl" alt="@pokemon.Name" class="pokemon-list-image" />
+                                <span class="text-capitalize fw-semibold">@pokemon.Name</span>
+                            </div>
+                        </td>
+                        <td>
+                            @if (pokemon.Abilities.Count == 0)
+                            {
+                                <span class="text-muted small">Sin habilidades registradas</span>
+                            }
+                            else
+                            {
+                                @foreach (var ability in pokemon.Abilities)
+                                {
+                                    <span class="badge rounded-pill @(ability.IsHidden ? "text-bg-secondary" : "text-bg-primary") text-capitalize me-1 mb-1">
+                                        @ability.Name@(ability.IsHidden ? " (Oculta)" : string.Empty)
+                                    </span>
+                                }
+                            }
+                        </td>
+                        <td class="text-end">
+                            <a class="btn btn-outline-primary btn-sm" asp-controller="Pokemon" asp-action="Detail" asp-route-nameOrId="@pokemon.Name">Ver detalle</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
 
 <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mt-4">
     <small class="text-muted">
@@ -59,7 +127,7 @@
     <nav aria-label="Paginación de Pokémon">
         <ul class="pagination mb-0">
             <li class="page-item @(Model.HasPreviousPage ? string.Empty : "disabled")">
-                <a class="page-link" asp-action="Index" asp-route-searchTerm="@Model.SearchTerm" asp-route-page="@(Model.Page - 1)" asp-route-pageSize="@Model.PageSize">Anterior</a>
+                <a class="page-link" asp-action="Index" asp-route-searchTerm="@Model.SearchTerm" asp-route-viewMode="@Model.ViewMode" asp-route-page="@(Model.Page - 1)" asp-route-pageSize="@Model.PageSize">Anterior</a>
             </li>
 
             @{
@@ -71,12 +139,12 @@
             @for (var pageNumber = startPage; pageNumber <= endPage; pageNumber++)
             {
                 <li class="page-item @(pageNumber == Model.Page ? "active" : string.Empty)">
-                    <a class="page-link" asp-action="Index" asp-route-searchTerm="@Model.SearchTerm" asp-route-page="@pageNumber" asp-route-pageSize="@Model.PageSize">@pageNumber</a>
+                    <a class="page-link" asp-action="Index" asp-route-searchTerm="@Model.SearchTerm" asp-route-viewMode="@Model.ViewMode" asp-route-page="@pageNumber" asp-route-pageSize="@Model.PageSize">@pageNumber</a>
                 </li>
             }
 
             <li class="page-item @(Model.HasNextPage ? string.Empty : "disabled")">
-                <a class="page-link" asp-action="Index" asp-route-searchTerm="@Model.SearchTerm" asp-route-page="@(Model.Page + 1)" asp-route-pageSize="@Model.PageSize">Siguiente</a>
+                <a class="page-link" asp-action="Index" asp-route-searchTerm="@Model.SearchTerm" asp-route-viewMode="@Model.ViewMode" asp-route-page="@(Model.Page + 1)" asp-route-pageSize="@Model.PageSize">Siguiente</a>
             </li>
         </ul>
     </nav>
